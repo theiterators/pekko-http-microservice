@@ -6,7 +6,7 @@
 
 Hot update: it's now running on Scala 3!
 
-This project demonstrates the [Pekko HTTP](https://doc.pekko.io/docs/pekko-http/current/?language=scala) library and Scala to write a simple REST (micro)service. The project shows the following tasks that are typical for most Pekko HTTP-based projects:
+This project demonstrates the [Pekko HTTP](https://pekko.apache.org/docs/pekko/current///index.html) library and Scala to write a simple REST (micro)service. The project shows the following tasks that are typical for most Pekko HTTP-based projects:
 
 * starting standalone HTTP server,
 * handling file-based configuration,
