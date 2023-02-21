@@ -15,23 +15,23 @@ resolvers += "Apache Snapshots" at "https://repository.apache.org/content/reposi
 resolvers ++= Resolver.sonatypeOssRepos("snapshots")
 
 libraryDependencies ++= {
-  val pekkoHttpV      = "0.0.0+4275-e7598916-SNAPSHOT"
-  val pekkoV          = "0.0.0+26572-982780b0-SNAPSHOT"
+  val pekkoHttpV     = "0.0.0+4275-e7598916-SNAPSHOT"
+  val pekkoV         = "0.0.0+26572-982780b0-SNAPSHOT"
   val circeV         = "0.14.4"
   val scalaTestV     = "3.2.15"
   val pekkoHttpJsonV = "1.40.0-RC3_10-d8ca725b-SNAPSHOT"
   Seq(
-    "org.apache.pekko" %% "pekko-actor" % pekkoV,
-    "org.apache.pekko" %% "pekko-stream" % pekkoV,
+    "org.apache.pekko" %% "pekko-actor"   % pekkoV,
+    "org.apache.pekko" %% "pekko-stream"  % pekkoV,
     "org.apache.pekko" %% "pekko-testkit" % pekkoV,
-    "io.circe"          %% "circe-core" % circeV,
-    "io.circe"          %% "circe-parser" % circeV,
-    "io.circe"          %% "circe-generic" % circeV,
-    "org.scalatest"     %% "scalatest" % scalaTestV % "test"
+    "io.circe"         %% "circe-core"    % circeV,
+    "io.circe"         %% "circe-parser"  % circeV,
+    "io.circe"         %% "circe-generic" % circeV,
+    "org.scalatest"    %% "scalatest"     % scalaTestV % "test"
   ) ++ Seq(
-    "org.apache.pekko" %% "pekko-http" % pekkoHttpV,
-    "org.apache.pekko" %% "pekko-http-testkit" % pekkoHttpV % "test",
-    "com.github.pjfanning" %% "pekko-http-circe" % pekkoHttpJsonV,
+    "org.apache.pekko"     %% "pekko-http"         % pekkoHttpV,
+    "org.apache.pekko"     %% "pekko-http-testkit" % pekkoHttpV % "test",
+    "com.github.pjfanning" %% "pekko-http-circe"   % pekkoHttpJsonV
   ).map(_.cross(CrossVersion.for3Use2_13))
 }
 
