@@ -1,12 +1,12 @@
-# Akka HTTP microservice example
+# Pekko HTTP microservice example
 
 [![Join the chat at https://gitter.im/theiterators/akka-http-microservice](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/theiterators/akka-http-microservice?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/theiterators/akka-http-microservice/master/COPYING)
-![Build Status](https://github.com/theiterators/akka-http-microservice/actions/workflows/ci.yml/badge.svg)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/theiterators/pekko-http-microservice/master/COPYING)
+![Build Status](https://github.com/theiterators/pekko-http-microservice/actions/workflows/ci.yml/badge.svg)
 
 Hot update: it's now running on Scala 3!
 
-This project demonstrates the [Akka HTTP](https://doc.akka.io/docs/akka-http/current/?language=scala) library and Scala to write a simple REST (micro)service. The project shows the following tasks that are typical for most Akka HTTP-based projects:
+This project demonstrates the [Pekko HTTP](https://doc.pekko.io/docs/pekko-http/current/?language=scala) library and Scala to write a simple REST (micro)service. The project shows the following tasks that are typical for most Pekko HTTP-based projects:
 
 * starting standalone HTTP server,
 * handling file-based configuration,
@@ -21,10 +21,11 @@ This project demonstrates the [Akka HTTP](https://doc.akka.io/docs/akka-http/cur
 
 The service in the template provides two REST endpoints - one which gives GeoIP info for given IP and another for calculating geographical distance between given pair of IPs. The project uses the service [ip-api](http://ip-api.com/) which offers JSON IP and GeoIP REST API for free for non-commercial use.
 
-If you want to read a more thorough explanation, check out [tutorial](https://github.com/theiterators/akka-http-microservice/blob/master/TUTORIAL.md).
+If you want to read a more thorough explanation, check out [tutorial](https://github.com/theiterators/pekko-http-microservice/blob/master/TUTORIAL.md).
 
 [![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
-[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/theiterators/akka-http-microservice)
+[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/theiterators/pekko-http-microservice)
+
 ## Usage
 
 Start services with sbt:
