@@ -1,10 +1,9 @@
 # Pekko HTTP microservice example
 
-[![Join the chat at https://gitter.im/theiterators/akka-http-microservice](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/theiterators/akka-http-microservice?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/theiterators/pekko-http-microservice/master/COPYING)
 ![Build Status](https://github.com/theiterators/pekko-http-microservice/actions/workflows/ci.yml/badge.svg)
 
-Hot update: it's now running on Scala 3!
+**This repository is a fork of [akka-http-microservice](https://github.com/theiterators/akka-http-microservice).**
 
 This project demonstrates the [Pekko HTTP](https://pekko.apache.org/docs/pekko/current///index.html) library and Scala to write a simple REST (micro)service. The project shows the following tasks that are typical for most Pekko HTTP-based projects:
 
