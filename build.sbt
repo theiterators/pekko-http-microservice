@@ -15,11 +15,11 @@ resolvers += "Apache Snapshots" at "https://repository.apache.org/content/reposi
 resolvers ++= Resolver.sonatypeOssRepos("snapshots")
 
 libraryDependencies ++= {
-  val pekkoHttpV     = "0.0.0+4407-64fd8ac8-SNAPSHOT"
-  val pekkoV         = "0.0.0+26572-982780b0-SNAPSHOT"
+  val pekkoHttpV     = "0.0.0+4468-963bd592-SNAPSHOT"
+  val pekkoV         = "1.0.0"
   val circeV         = "0.14.4"
-  val scalaTestV     = "3.2.15"
-  val pekkoHttpJsonV = "1.40.0-RC3_20-9b54213e-SNAPSHOT"
+  val scalaTestV     = "3.2.16"
+  val pekkoHttpJsonV = "0.0.0_1-b873253a-SNAPSHOT"
   Seq(
     "org.apache.pekko"     %% "pekko-actor"        % pekkoV,
     "org.apache.pekko"     %% "pekko-stream"       % pekkoV,
