@@ -18,7 +18,7 @@ libraryDependencies ++= {
   val pekkoV         = "1.0.1"
   val circeV         = "0.14.4"
   val scalaTestV     = "3.2.16"
-  val pekkoHttpJsonV = "0.0.0_1-b873253a-SNAPSHOT"
+  val pekkoHttpJsonV = "2.0.0"
   Seq(
     "org.apache.pekko"     %% "pekko-actor"        % pekkoV,
     "org.apache.pekko"     %% "pekko-stream"       % pekkoV,
