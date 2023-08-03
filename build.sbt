@@ -11,15 +11,14 @@ conflictWarning := ConflictWarning.disable
 
 scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8")
 
-resolvers += "Apache Snapshots" at "https://repository.apache.org/content/repositories/snapshots/"
 resolvers ++= Resolver.sonatypeOssRepos("snapshots")
 
 libraryDependencies ++= {
-  val pekkoHttpV     = "0.0.0+4407-64fd8ac8-SNAPSHOT"
-  val pekkoV         = "0.0.0+26572-982780b0-SNAPSHOT"
+  val pekkoHttpV     = "1.0.0"
+  val pekkoV         = "1.0.1"
   val circeV         = "0.14.4"
-  val scalaTestV     = "3.2.15"
-  val pekkoHttpJsonV = "1.40.0-RC3_20-9b54213e-SNAPSHOT"
+  val scalaTestV     = "3.2.16"
+  val pekkoHttpJsonV = "2.0.0"
   Seq(
     "org.apache.pekko"     %% "pekko-actor"        % pekkoV,
     "org.apache.pekko"     %% "pekko-stream"       % pekkoV,
