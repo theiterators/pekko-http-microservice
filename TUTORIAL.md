@@ -1,4 +1,4 @@
-# Akka HTTP microservice
+# Pekko HTTP microservice
 
 This template lets you learn about:
 
@@ -15,7 +15,7 @@ This template lets you learn about:
 
 It focuses on the HTTP part of the microservices and doesn't talk about database connection handling, etc.
 
-Check out the code and don't forget to comment or ask questions on [Github](https://github.com/theiterators/akka-http-microservice) and [Twitter](https://twitter.com/luksow).
+Check out the code and don't forget to comment or ask questions on [Github](https://github.com/theiterators/pekko-http-microservice) and [Twitter](https://twitter.com/luksow).
 
 Below you will find a brief tutorial about how the service works. You can:
 
@@ -108,12 +108,12 @@ Next: Now as we know what our microservice does, let's open up the code.
 
 There are four significant parts of the code. These are:
 
-*   [build.sbt](https://github.com/theiterators/akka-http-microservice/blob/master/build.sbt) and [plugins.sbt](https://github.com/theiterators/akka-http-microservice/blob/master/project/plugins.sbt) — the build scripts,
-*   [application.conf](https://github.com/theiterators/akka-http-microservice/blob/master/src/main/resources/application.conf) — the seed configuration for our microservice,
-*   [AkkaHttpMicroservice.scala](https://github.com/theiterators/akka-http-microservice/blob/master/src/main/scala/AkkaHttpMicroservice.scala) — our main Scala file.
-*   [ServiceSpec.scala](https://github.com/theiterators/akka-http-microservice/blob/master/src/test/scala/ServiceSpec.scala) — an example `akka-http` server test.
+*   [build.sbt](https://github.com/theiterators/pekko-http-microservice/blob/master/build.sbt) and [plugins.sbt](https://github.com/theiterators/pekko-http-microservice/blob/master/project/plugins.sbt) — the build scripts,
+*   [application.conf](https://github.com/theiterators/pekko-http-microservice/blob/master/src/main/resources/application.conf) — the seed configuration for our microservice,
+*   [PekkoHttpMicroservice.scala](https://github.com/theiterators/pekko-http-microservice/blob/master/src/main/scala/PekkoHttpMicroservice.scala) — our main Scala file.
+*   [ServiceSpec.scala](https://github.com/theiterators/pekko-http-microservice/blob/master/src/test/scala/ServiceSpec.scala) — an example `pekko-http` server test.
 
-The build scripts let SBT download all the dependencies for our project (including `akka-http`). They are described inside the build scripts part of the tutorial.
+The build scripts let SBT download all the dependencies for our project (including `pekko-http`). They are described inside the build scripts part of the tutorial.
 
 Configuration for our microservice is described in the configuration part of the tutorial.
 
@@ -121,20 +121,20 @@ The code implementing our microservice's logic is described in the "microservice
 
 ## Build scripts
 
-[build.sbt](https://github.com/theiterators/akka-http-microservice/blob/master/build.sbt) and [plugins.sbt](https://github.com/theiterators/akka-http-microservice/blob/master/project/plugins.sbt) hold the configuration for our build procedure.
+[build.sbt](https://github.com/theiterators/pekko-http-microservice/blob/master/build.sbt) and [plugins.sbt](https://github.com/theiterators/pekko-http-microservice/blob/master/project/plugins.sbt) hold the configuration for our build procedure.
 
 ### build.sbt
 
 `build.sbt` provides our project with typical meta-data like project names and versions, declares Scala compiler flags and lists the dependencies.
 
-*   `akka-actor` is the cornerstone of Actor system that `akka-http` and `akka-stream` are based on.
-*   `akka-stream` is the library implementing Reactive Streams using Akka actors — a framework for building reactive applications.
-*   `akka-http` is core library for creating reactive HTTP streams.
+*   `pekko-actor` is the cornerstone of Actor system that `pekko-http` and `pekko-stream` are based on.
+*   `pekko-stream` is the library implementing Reactive Streams using Pekko actors — a framework for building reactive applications.
+*   `pekko-http` is core library for creating reactive HTTP streams.
 *   `circe-core` is a library for handling JSONs.
 *   `circe-generic` is an extension to `circe-core` that offers auto generation of JSON encoders and decoders for case classes. 
-*   `akka-http-circe` is a library for marshaling `circe`'s JSONs into requests and responses.
-*   `akka-testkit` is a library that helps testing `akka`.
-*   `akka-http-testkit` is a library that helps testing `akka-http` routing and responses.
+*   `pekko-http-circe` is a library for marshaling `circe`'s JSONs into requests and responses.
+*   `pekko-testkit` is a library that helps testing `pekko`.
+*   `pekko-http-testkit` is a library that helps testing `pekko-http` routing and responses.
 *   `scalatest` is a standard Scala testing library.
 
 ### plugins.sbt
@@ -150,13 +150,13 @@ Next: As we know what are the dependencies of our project, let's see what is the
 
 ## Configuration
 
-The seed configuration for our microservice is available in the [application.conf](https://github.com/theiterators/akka-http-microservice/blob/master/src/main/resources/application.conf). It consists of three things:
+The seed configuration for our microservice is available in the [application.conf](https://github.com/theiterators/pekko-http-microservice/blob/master/src/main/resources/application.conf). It consists of three things:
 
-*   `akka` — Akka configuration,
+*   `pekko` — Pekko configuration,
 *   `http` — HTTP server configuration,
 *   `services` — external endpoints configuration.
 
-The Akka part of the configuration will let us see more log messages on the console when developing the microservice.
+The Pekko part of the configuration will let us see more log messages on the console when developing the microservice.
 
 HTTP interface needs to be given an interface that it will run on and port that will listen for new HTTP requests.
 
@@ -172,7 +172,7 @@ Next: Let's see how is our configuration used in the code.
 
 ## Microservice's code
 
-All of the code is held in [AkkaHttpMicroservice.scala](https://github.com/theiterators/akka-http-microservice/blob/master/src/main/scala/AkkaHttpMicroservice.scala). We can distinguish 6 parts of the code. These are:
+All of the code is held in [PekkoHttpMicroservice.scala](https://github.com/theiterators/pekko-http-microservice/blob/master/src/main/scala/PekkoHttpMicroservice.scala). We can distinguish 6 parts of the code. These are:
 
 *   the imports,
 *   type declarations and business domain,
@@ -194,7 +194,7 @@ This section of the tutorial explains:
 
 ## Scala types and protocols
 
-To see the usage of Scala types and protocols inside our microservice open up the [AkkaHttpMicroservice.scala](https://github.com/theiterators/akka-http-microservice/blob/master/src/main/scala/AkkaHttpMicroservice.scala#L22). We have three type of types there:
+To see the usage of Scala types and protocols inside our microservice open up the [PekkoHttpMicroservice.scala](https://github.com/theiterators/pekko-http-microservice/blob/master/src/main/scala/PekkoHttpMicroservice.scala#L22). We have three type of types there:
 
 *   `IpApiResponse` and `IpApiResponseStatus` — a case class (with dedicated enum) that models external API response. 
 *   `IpPairSummaryRequest` — a case class that models our JSON HTTP request's body.
@@ -202,7 +202,7 @@ To see the usage of Scala types and protocols inside our microservice open up th
 
 ### Modeling requests
 
-`akka-http` can unmarshal any JSON request into a type. This way we can validate incoming requests and pass only the ones that are well-formed and complete. The easiest way to model requests is to create algebraic data types and instrument them with validations in a constructor (typical methods include using Scala's Predef library with its `require` method). Example:
+`pekko-http` can unmarshal any JSON request into a type. This way we can validate incoming requests and pass only the ones that are well-formed and complete. The easiest way to model requests is to create algebraic data types and instrument them with validations in a constructor (typical methods include using Scala's Predef library with its `require` method). Example:
 
      case class IpPairSummaryRequest(...) {
       ...
@@ -212,7 +212,7 @@ To see the usage of Scala types and protocols inside our microservice open up th
 
 ### Forming JSON response
 
-One of the great features of `akka-http` is response marshaling. The responses will be implicitly converted into JSON whether they are `Option[T]`, `Future[T]`, etc. Proper errors and response codes will also be generated.
+One of the great features of `pekko-http` is response marshaling. The responses will be implicitly converted into JSON whether they are `Option[T]`, `Future[T]`, etc. Proper errors and response codes will also be generated.
 
 Using this feature requires:
 
@@ -223,11 +223,11 @@ Next: Making external HTTP requests.
 
 ## Making an external HTTP request
 
-Handling communication with external HTTP services is done inside [`Service`](https://github.com/theiterators/akka-http-microservice/blob/master/src/main/scala/AkkaHttpMicroservice.scala#L64) trait.
+Handling communication with external HTTP services is done inside [`Service`](https://github.com/theiterators/pekko-http-microservice/blob/master/src/main/scala/PekkoHttpMicroservice.scala#L64) trait.
 
 ### Making an HTTP request
 
-Making a proper HTTP request using `akka-http` leverages the Reactive Streams approach. It requires:
+Making a proper HTTP request using `pekko-http` leverages the Reactive Streams approach. It requires:
 
 *   defining an external service HTTP connection flow,
 *   defining a proper HTTP request,
@@ -249,9 +249,9 @@ Next: Declaring routes and responding to HTTP requests.
 
 ## Routing and running server
 
-Routing directives can be found in the [`Service`](https://github.com/theiterators/akka-http-microservice/blob/master/src/main/scala/AkkaHttpMicroservice.scala#L85) trait.
+Routing directives can be found in the [`Service`](https://github.com/theiterators/pekko-http-microservice/blob/master/src/main/scala/PekkoHttpMicroservice.scala#L85) trait.
 
-`akka-http` provides lots of useful routing directives. One can use multiple directives by nesting them inside one another. The request will go deeper down the nested structure if only it complies with each of the directive's requirements. Some directives filter the requests while others help to deconstruct it. If the request passes all directives, the final `complete(...) {...}` block gets evaluated as a `HttpResponse`.
+`pekko-http` provides lots of useful routing directives. One can use multiple directives by nesting them inside one another. The request will go deeper down the nested structure if only it complies with each of the directive's requirements. Some directives filter the requests while others help to deconstruct it. If the request passes all directives, the final `complete(...) {...}` block gets evaluated as a `HttpResponse`.
 
 ### Routing & filtering directives
 
@@ -283,28 +283,28 @@ There are other directives like `logRequestResult` that don't change the flow of
 
 ### Building a response
 
-If we use JSON marshaling, it is very easy to build a JSON response. All we need to do is to return marshalable type in `complete` directive (ex. `String`, `Future[T]`, `Option[T]`, `StatusCode`, etc.). Most of the HTTP status codes are already implemented in `akka-http`. Some of them are:
+If we use JSON marshaling, it is very easy to build a JSON response. All we need to do is to return marshalable type in `complete` directive (ex. `String`, `Future[T]`, `Option[T]`, `StatusCode`, etc.). Most of the HTTP status codes are already implemented in `pekko-http`. Some of them are:
 
 *   `Ok` — 200 response
 *   `NotFound` — 404 response which is automatically generated when `None` is returned.
 *   `Unauthorized` — 401 response
 *   `Bad Request` — 400 response
 
-Next: Testing `akka-http`.
+Next: Testing `pekko-http`.
 
 ## Tests
 
-Check out [simple tests that we prepared](https://github.com/theiterators/akka-http-microservice/blob/master/src/test/scala/ServiceSpec.scala) and don't forget to run them on your computer (`sbt test`)! 
+Check out [simple tests that we prepared](https://github.com/theiterators/pekko-http-microservice/blob/master/src/test/scala/ServiceSpec.scala) and don't forget to run them on your computer (`sbt test`)! 
 
 The interesting parts of the tests are:
 
 *   the syntax of route checking,
-*   [the way external requests are mocked](https://github.com/theiterators/akka-http-microservice/blob/master/src/test/scala/ServiceSpec.scala#L19).
+*   [the way external requests are mocked](https://github.com/theiterators/pekko-http-microservice/blob/master/src/test/scala/ServiceSpec.scala#L19).
 
 Next: Tutorial summary.
 
 ## Summary
 
-And that's it! We hope you enjoyed this tutorial and learned how to write a small microservice that uses `akka-http`, responds to `GET` and `POST` requests with JSON, and connects with external services through HTTP endpoint.
+And that's it! We hope you enjoyed this tutorial and learned how to write a small microservice that uses `pekko-http`, responds to `GET` and `POST` requests with JSON, and connects with external services through HTTP endpoint.
 
-Be sure to ping us on [Github](https://github.com/theiterators/akka-http-microservice) or [Twitter](https://twitter.com/luksow) if you liked it or if you have any questions.
+Be sure to ping us on [Github](https://github.com/theiterators/pekko-http-microservice) or [Twitter](https://twitter.com/luksow) if you liked it or if you have any questions.
