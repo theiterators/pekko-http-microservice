@@ -1,11 +1,11 @@
-# Akka HTTP microservice example
+# Pekko HTTP microservice example
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/theiterators/akka-http-microservice/master/COPYING)
-![Build Status](https://github.com/theiterators/akka-http-microservice/actions/workflows/ci.yml/badge.svg)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/theiterators/pekko-http-microservice/master/COPYING)
+![Build Status](https://github.com/theiterators/pekko-http-microservice/actions/workflows/ci.yml/badge.svg)
 
-**Due to recent [Akka's license change](https://www.lightbend.com/blog/why-we-are-changing-the-license-for-akka), a fork named [Pekko](https://github.com/apache/incubator-pekko) was created under the Apache Foundation. Starting a new project, you should consider using [Pekko HTTP](https://github.com/apache/incubator-pekko-http). There's a sibling open source template we've created named [pekko-http-microservice](https://github.com/theiterators/pekko-http-microservice).**
+**This repository is a fork of [akka-http-microservice](https://github.com/theiterators/akka-http-microservice).**
 
-This project demonstrates the [Akka HTTP](https://doc.akka.io/docs/akka-http/current/?language=scala) library and Scala to write a simple REST (micro)service. The project shows the following tasks that are typical for most Akka HTTP-based projects:
+This project demonstrates the [Pekko HTTP](https://pekko.apache.org/docs/pekko/current///index.html) library and Scala to write a simple REST (micro)service. The project shows the following tasks that are typical for most Pekko HTTP-based projects:
 
 * starting standalone HTTP server,
 * handling file-based configuration,
@@ -20,10 +20,11 @@ This project demonstrates the [Akka HTTP](https://doc.akka.io/docs/akka-http/cur
 
 The service in the template provides two REST endpoints - one which gives GeoIP info for given IP and another for calculating geographical distance between given pair of IPs. The project uses the service [ip-api](http://ip-api.com/) which offers JSON IP and GeoIP REST API for free for non-commercial use.
 
-If you want to read a more thorough explanation, check out [tutorial](https://github.com/theiterators/akka-http-microservice/blob/master/TUTORIAL.md).
+If you want to read a more thorough explanation, check out [tutorial](https://github.com/theiterators/pekko-http-microservice/blob/master/TUTORIAL.md).
 
 [![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
-[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/theiterators/akka-http-microservice)
+[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/theiterators/pekko-http-microservice)
+
 ## Usage
 
 Start services with sbt:
