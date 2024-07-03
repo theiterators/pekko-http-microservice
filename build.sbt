@@ -17,7 +17,7 @@ libraryDependencies ++= {
   val pekkoHttpV     = "1.0.0"
   val pekkoV         = "1.0.1"
   val circeV         = "0.14.4"
-  val scalaTestV     = "3.2.18"
+  val scalaTestV     = "3.2.19"
   val akkaHttpCirceV = "1.39.2"
   val pekkoHttpJsonV = "2.0.0"
 
