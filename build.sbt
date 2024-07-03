@@ -2,35 +2,36 @@ import sbt.librarymanagement.ConflictWarning
 
 enablePlugins(JavaAppPackaging)
 
-name := "akka-http-microservice"
+name := "pekko-http-microservice"
 organization := "com.theiterators"
 version := "1.0"
-scalaVersion := "3.2.2"
+scalaVersion := "3.3.0"
 
 conflictWarning := ConflictWarning.disable
 
 scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8")
 
+resolvers ++= Resolver.sonatypeOssRepos("snapshots")
+
 libraryDependencies ++= {
-  val akkaHttpV      = "10.2.10"
-  val akkaV          = "2.6.20"
+  val pekkoHttpV     = "1.0.0"
+  val pekkoV         = "1.0.1"
   val circeV         = "0.14.4"
   val scalaTestV     = "3.2.18"
-  val akkaHttpCirceV = "1.39.2"
+  val pekkoHttpJsonV = "2.0.0"
 
   Seq(
-    "io.circe"          %% "circe-core" % circeV,
-    "io.circe"          %% "circe-parser" % circeV,
-    "io.circe"          %% "circe-generic" % circeV,
-    "org.scalatest"     %% "scalatest" % scalaTestV % "test"
-  ) ++ Seq(
-    "com.typesafe.akka" %% "akka-actor" % akkaV,
-    "com.typesafe.akka" %% "akka-stream" % akkaV,
-    "com.typesafe.akka" %% "akka-http" % akkaHttpV,
-    "de.heikoseeberger" %% "akka-http-circe" % akkaHttpCirceV,
-    "com.typesafe.akka" %% "akka-testkit" % akkaV,
-    "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpV % "test"
-  ).map(_.cross(CrossVersion.for3Use2_13))
+    "org.apache.pekko"     %% "pekko-actor"        % pekkoV,
+    "org.apache.pekko"     %% "pekko-stream"       % pekkoV,
+    "org.apache.pekko"     %% "pekko-http"         % pekkoHttpV,
+    "org.apache.pekko"     %% "pekko-testkit"      % pekkoV % "test",
+    "org.apache.pekko"     %% "pekko-http-testkit" % pekkoHttpV % "test",
+    "io.circe"             %% "circe-core"         % circeV,
+    "io.circe"             %% "circe-parser"       % circeV,
+    "io.circe"             %% "circe-generic"      % circeV,
+    "com.github.pjfanning" %% "pekko-http-circe"   % pekkoHttpJsonV,
+    "org.scalatest"        %% "scalatest"          % scalaTestV % "test"
+  )
 }
 
 Revolver.settings
