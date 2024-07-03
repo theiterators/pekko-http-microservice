@@ -5,7 +5,7 @@ enablePlugins(JavaAppPackaging)
 name := "pekko-http-microservice"
 organization := "com.theiterators"
 version := "1.0"
-scalaVersion := "3.3.0"
+scalaVersion := "3.3.3"
 
 conflictWarning := ConflictWarning.disable
 
@@ -18,6 +18,7 @@ libraryDependencies ++= {
   val pekkoV         = "1.0.1"
   val circeV         = "0.14.4"
   val scalaTestV     = "3.2.18"
+  val akkaHttpCirceV = "1.39.2"
   val pekkoHttpJsonV = "2.0.0"
 
   Seq(
