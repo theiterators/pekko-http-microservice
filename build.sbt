@@ -14,12 +14,12 @@ scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8")
 resolvers ++= Resolver.sonatypeOssRepos("snapshots")
 
 libraryDependencies ++= {
-  val pekkoHttpV     = "1.0.0"
-  val pekkoV         = "1.0.1"
-  val circeV         = "0.14.4"
+  val pekkoHttpV     = "1.0.1"
+  val pekkoV         = "1.0.3"
+  val circeV         = "0.14.9"
   val scalaTestV     = "3.2.19"
   val akkaHttpCirceV = "1.39.2"
-  val pekkoHttpJsonV = "2.0.0"
+  val pekkoHttpJsonV = "2.6.0"
 
   Seq(
     "org.apache.pekko"     %% "pekko-actor"        % pekkoV,
