@@ -11,7 +11,7 @@ conflictWarning := ConflictWarning.disable
 
 scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8")
 
-resolvers ++= Resolver.sonatypeOssRepos("snapshots")
+resolvers += Resolver.sonatypeCentralSnapshots
 
 libraryDependencies ++= {
   val pekkoHttpV     = "1.3.0"
