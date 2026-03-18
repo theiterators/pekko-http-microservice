@@ -1,310 +1,228 @@
-# Pekko HTTP microservice
+# Pekko HTTP microservice tutorial
 
-This template lets you learn about:
+This tutorial walks through a small REST microservice built with [Pekko HTTP](https://pekko.apache.org/docs/pekko-http/current/) and Scala 3. You'll learn about:
 
-*   starting standalone HTTP server,
-*   handling simple, file-based configuration,
-*   logging,
-*   routing,
-*   deconstructing requests,
-*   unmarshaling JSON entities to Scala's case classes,
-*   marshaling Scala's case classes to JSON responses,
-*   error handling,
-*   issuing requests to external services,
-*   testing with mocking of external services.
+* starting a standalone HTTP server,
+* handling file-based configuration,
+* logging,
+* routing,
+* deconstructing requests,
+* unmarshalling JSON entities to Scala's case classes,
+* marshalling Scala's case classes to JSON responses,
+* error handling,
+* issuing requests to external services,
+* testing with mocking of external services.
 
-It focuses on the HTTP part of the microservices and doesn't talk about database connection handling, etc.
+The tutorial focuses on the HTTP layer and doesn't cover database access or other persistence concerns.
 
-Check out the code and don't forget to comment or ask questions on [Github](https://github.com/theiterators/pekko-http-microservice) and [Twitter](https://twitter.com/luksow).
-
-Below you will find a brief tutorial about how the service works. You can:
-
-*   learn what a microservice is,
-*   check what our microservice does,
-*   or you can go straight to the code.
+Check out the code and feel free to open issues on [GitHub](https://github.com/theiterators/pekko-http-microservice).
 
 ## What is a microservice?
 
-Microservice is a tiny standalone program that can be used as a component of a bigger distributed system. Microservices:
+A microservice is a small, focused program that handles a single bounded domain. Microservices are typically:
 
-*   are short and concise,
-*   process only one bounded domain.
+* short and concise,
+* responsible for one type of data or operation.
 
-In order to be readable and rewritable, code in microservices is usually very short and brief. It's usually responsible for processing only one type of data (in this project it is IP location data). They rarely use the high level of abstraction over databases, networking, and other components. It all makes them easier to understand and easier to reuse in multiple projects.
+Because the code stays small, it's easier to understand, rewrite, and reuse across projects. In this example, the bounded domain is IP geolocation data.
 
-Next: What does the example microservice do?
+## What does this microservice do?
 
-## Geolocation of IP addresses
+The service has two features:
 
-Our example microservice has two main features. It should:
+* locate an IP address geographically,
+* compute the distance between two IP addresses.
 
-*   locate an IP address,
-*   compute distances between locations of two IP addresses.
+It exposes two HTTP JSON endpoints:
 
-It should do all that by exposing two HTTP JSON endpoints:
+* `GET /ip/X.X.X.X` — returns geolocation data for the given IP,
+* `POST /ip` — accepts `{"ip1": "X.X.X.X", "ip2": "Y.Y.Y.Y"}` and returns the distance between the two IPs along with their geolocation data.
 
-*   `GET /ip/X.X.X.X` — which returns given IP's geolocation data,
-*   `POST /ip` — which returns distance between two IPs geolocations given JSON request `{"ip1": "X.X.X.X", "ip2": "Y.Y.Y.Y"}`.
+## Running the service
 
-Next: Let's see how to run it!
+Start the service with:
 
-## Running the template
+```
+$ sbt "~reStart"
+```
 
-Issue `$ sbt "~reStart"` to see the microservice compiling and running.
+Check where Google's DNS servers are located by opening [`http://localhost:9000/ip/8.8.8.8`](http://localhost:9000/ip/8.8.8.8) in your browser, or use `curl`:
 
-You can check out where are Google DNS servers by opening [`http://localhost:9000/ip/8.8.8.8`](http://localhost:9000/ip/8.8.8.8). As you can see in the URL, the browser will send GET request to the first endpoint.
+```
+$ curl http://localhost:9000/ip/8.8.8.8
+```
 
-You can also check our endpoints using `curl` command line tool:
+```
+$ curl -X POST -H 'Content-Type: application/json' http://localhost:9000/ip -d '{"ip1": "8.8.8.8", "ip2": "8.8.4.4"}'
+```
 
-    $ curl http://localhost:9000/ip/8.8.8.8
+## Example responses
 
-and
+Single IP lookup:
 
-    $ curl -X POST -H 'Content-Type: application/json' http://localhost:9000/ip -d '{"ip1": "8.8.8.8", "ip2": "8.8.4.4"}'
+```json
+{
+  "city": "Mountain View",
+  "query": "8.8.8.8",
+  "country": "United States",
+  "lon": -122.0881,
+  "lat": 37.3845
+}
+```
 
-for the second endpoint.
+IP pair distance:
 
-If you don't have curl installed you can install it [from the source](http://curl.haxx.se/docs/install.html), using your OS package manager or you can use Postman REST Client in your browser.
-
-Next: Let's see how our responses look like
-
-## The Geolocation IP responses
-
-Responses should look like that:
-
-    {
-      "city": "Mountain View",
-      "query": "8.8.8.8",
-      "country": "United States",
-      "lon": -122.0881,
-      "lat": 37.3845
-    }
-
-for the first endpoint and
-
-    {
-      "distance": 4347.6243474947,
-      "ip1Info": {
-        "city": "Mountain View",
-        "query": "8.8.8.8",
-        "country": "United States",
-        "lon": -122.0881,
-        "lat": 37.3845
-      },
-      "ip2Info": {
-        "city": "Norwell",
-        "query": "93.184.216.34",
-        "country": "United States",
-        "lon": -70.8228,
-        "lat": 42.1508
-      }
-    }
-
-In the sbt output you can see the request/response logs the app generates.
-
-Next: Now as we know what our microservice does, let's open up the code.
+```json
+{
+  "distance": 4347.6243474947,
+  "ip1Info": {
+    "city": "Mountain View",
+    "query": "8.8.8.8",
+    "country": "United States",
+    "lon": -122.0881,
+    "lat": 37.3845
+  },
+  "ip2Info": {
+    "city": "Norwell",
+    "query": "93.184.216.34",
+    "country": "United States",
+    "lon": -70.8228,
+    "lat": 42.1508
+  }
+}
+```
 
 ## Code overview
 
-There are four significant parts of the code. These are:
+The project has four main parts:
 
-*   [build.sbt](https://github.com/theiterators/pekko-http-microservice/blob/master/build.sbt) and [plugins.sbt](https://github.com/theiterators/pekko-http-microservice/blob/master/project/plugins.sbt) — the build scripts,
-*   [application.conf](https://github.com/theiterators/pekko-http-microservice/blob/master/src/main/resources/application.conf) — the seed configuration for our microservice,
-*   [PekkoHttpMicroservice.scala](https://github.com/theiterators/pekko-http-microservice/blob/master/src/main/scala/PekkoHttpMicroservice.scala) — our main Scala file.
-*   [ServiceSpec.scala](https://github.com/theiterators/pekko-http-microservice/blob/master/src/test/scala/ServiceSpec.scala) — an example `pekko-http` server test.
-
-The build scripts let SBT download all the dependencies for our project (including `pekko-http`). They are described inside the build scripts part of the tutorial.
-
-Configuration for our microservice is described in the configuration part of the tutorial.
-
-The code implementing our microservice's logic is described in the "microservice's code" section.
+* [build.sbt](https://github.com/theiterators/pekko-http-microservice/blob/master/build.sbt) and [plugins.sbt](https://github.com/theiterators/pekko-http-microservice/blob/master/project/plugins.sbt) — build configuration and dependencies,
+* [application.conf](https://github.com/theiterators/pekko-http-microservice/blob/master/src/main/resources/application.conf) — runtime configuration,
+* [PekkoHttpMicroservice.scala](https://github.com/theiterators/pekko-http-microservice/blob/master/src/main/scala/PekkoHttpMicroservice.scala) — the service implementation,
+* [ServiceSpec.scala](https://github.com/theiterators/pekko-http-microservice/blob/master/src/test/scala/ServiceSpec.scala) — tests.
 
 ## Build scripts
 
-[build.sbt](https://github.com/theiterators/pekko-http-microservice/blob/master/build.sbt) and [plugins.sbt](https://github.com/theiterators/pekko-http-microservice/blob/master/project/plugins.sbt) hold the configuration for our build procedure.
-
 ### build.sbt
 
-`build.sbt` provides our project with typical meta-data like project names and versions, declares Scala compiler flags and lists the dependencies.
+`build.sbt` declares the project metadata, Scala compiler flags, and dependencies:
 
-*   `pekko-actor` is the cornerstone of Actor system that `pekko-http` and `pekko-stream` are based on.
-*   `pekko-stream` is the library implementing Reactive Streams using Pekko actors — a framework for building reactive applications.
-*   `pekko-http` is core library for creating reactive HTTP streams.
-*   `circe-core` is a library for handling JSONs.
-*   `circe-generic` is an extension to `circe-core` that offers auto generation of JSON encoders and decoders for case classes. 
-*   `pekko-http-circe` is a library for marshaling `circe`'s JSONs into requests and responses.
-*   `pekko-testkit` is a library that helps testing `pekko`.
-*   `pekko-http-testkit` is a library that helps testing `pekko-http` routing and responses.
-*   `scalatest` is a standard Scala testing library.
+* `pekko-actor` — the Actor system that `pekko-http` and `pekko-stream` are built on.
+* `pekko-stream` — Reactive Streams implementation using Pekko actors.
+* `pekko-http` — the core library for building reactive HTTP services.
+* `circe-core` — JSON handling.
+* `circe-generic` — automatic derivation of JSON encoders and decoders for case classes.
+* `pekko-http-circe` — integration between Pekko HTTP and circe for request/response marshalling.
+* `pekko-testkit` — testing utilities for Pekko actors.
+* `pekko-http-testkit` — testing utilities for Pekko HTTP routes.
+* `scalatest` — Scala testing library.
 
 ### plugins.sbt
 
-There are four plugins used in our project. These are:
+The project uses four sbt plugins:
 
-*   `sbt-revolver` which is helpful for development. It recompiles and runs our microservice every time the code in files changes (`~reStart` sbt command). Notice that it is initialized inside `build.sbt`.
-*   `sbt-assembly` is a great library that lets us deploy our microservice as a single .jar file.
-*   `sbt-native-packager` is needed by Heroku to stage the app.
-*   `sbt-updates` provides a handy sbt command `dependencyUpdates` that list dependencies that could be updated.
-
-Next: As we know what are the dependencies of our project, let's see what is the minimal configuration needed for the project.
+* `sbt-revolver` — recompiles and restarts the service on file changes (`~reStart` command). Initialized in `build.sbt`.
+* `sbt-assembly` — packages the service as a single fat JAR for deployment.
+* `sbt-native-packager` — produces native packages (Docker images, .deb, etc.).
+* `sbt-updates` — provides the `dependencyUpdates` command to check for newer dependency versions.
 
 ## Configuration
 
-The seed configuration for our microservice is available in the [application.conf](https://github.com/theiterators/pekko-http-microservice/blob/master/src/main/resources/application.conf). It consists of three things:
+The configuration lives in [application.conf](https://github.com/theiterators/pekko-http-microservice/blob/master/src/main/resources/application.conf) and has three sections:
 
-*   `pekko` — Pekko configuration,
-*   `http` — HTTP server configuration,
-*   `services` — external endpoints configuration.
+* `pekko` — Pekko actor system settings (log level, etc.),
+* `http` — HTTP server interface and port,
+* `services` — external service endpoints (ip-api host and port).
 
-The Pekko part of the configuration will let us see more log messages on the console when developing the microservice.
+Configuration values can be overridden at runtime:
 
-HTTP interface needs to be given an interface that it will run on and port that will listen for new HTTP requests.
+```
+java -jar microservice.jar -Dservices.ip-api.port=8080
+```
 
-Our microservice uses external service `http://ip-api.com/` to find where the IP we're trying to find is.
+## The service code
 
-When deploying microservice as a `.jar` file, one can overwrite the configuration values when running the jar.
+All of the code lives in [PekkoHttpMicroservice.scala](https://github.com/theiterators/pekko-http-microservice/blob/master/src/main/scala/PekkoHttpMicroservice.scala). It breaks down into these parts:
 
-    java -jar microservice.jar -Dservices.ip-api.port=8080
+* **Domain types** — case classes and enums modeling the data,
+* **Protocols** — JSON encoder/decoder instances,
+* **Service trait** — external HTTP communication and route definitions,
+* **Main object** — wiring and server startup.
 
-Using a configuration management system is also recommended as the amount of variables rises quickly. It is hard to maintain configuration files across the more complex microservice architecture.
+### Domain types
 
-Next: Let's see how is our configuration used in the code.
+The service defines a few types:
 
-## Microservice's code
+* `IpApiResponse` / `IpApiResponseStatus` — models the external ip-api.com response, including a status enum to distinguish success from failure.
+* `IpPairSummaryRequest` — models the incoming POST request body.
+* `IpInfo` and `IpPairSummary` — intermediate types that get serialized to JSON responses. `IpPairSummary` also contains the Haversine distance calculation between two coordinates.
 
-All of the code is held in [PekkoHttpMicroservice.scala](https://github.com/theiterators/pekko-http-microservice/blob/master/src/main/scala/PekkoHttpMicroservice.scala). We can distinguish 6 parts of the code. These are:
+### Protocols (JSON marshalling)
 
-*   the imports,
-*   type declarations and business domain,
-*   protocols,
-*   networking logic,
-*   routes,
-*   main App declaration.
+The `Protocols` trait (which extends `ErrorAccumulatingCirceSupport` from pekko-http-circe) defines implicit circe encoders and decoders for all domain types. These are derived automatically using `circe-generic`'s `deriveEncoder` and `deriveDecoder`. Having these implicits in scope lets Pekko HTTP automatically marshal and unmarshal JSON request/response bodies.
 
-The names, order, and configuration are not standardized, but the list above will make it easier for us to reason about this code.
+### External HTTP requests
 
-We won't get into many details about imports. The only thing worth remembering is that there are many `implicit values` imported and one should be cautious when removing the imports, as many of them can be marked as unused by one's IDE.
+The `Service` trait defines how the service communicates with ip-api.com:
 
-This section of the tutorial explains:
+1. `ipApiConnectionFlow` — an Pekko HTTP client connection flow to the external service, configured from `application.conf`.
+2. `ipApiRequest` — sends a single HTTP request through the connection flow and collects the response.
+3. `fetchIpInfo` — builds a GET request to `/json/{ip}`, sends it, checks the response status, and unmarshals the JSON body into either an `IpInfo` (on success) or an error message string (on failure). Uses Scala 3 union types (`String | IpInfo`) for the result.
 
-*   How to use Scala types in HTTP microservice?
-*   How to do external HTTP requests?
-*   How to declare HTTP routes?
-*   What do our tests do?
+### Routes
 
-## Scala types and protocols
+The route tree is defined in the `Service` trait's `routes` value:
 
-To see the usage of Scala types and protocols inside our microservice open up the [PekkoHttpMicroservice.scala](https://github.com/theiterators/pekko-http-microservice/blob/master/src/main/scala/PekkoHttpMicroservice.scala#L22). We have three type of types there:
+```
+pathPrefix("ip") {
+  (get & path(Segment)) { ip => ... }    // GET /ip/X.X.X.X
+  ~
+  (post & entity(as[IpPairSummaryRequest])) { req => ... }  // POST /ip
+}
+```
 
-*   `IpApiResponse` and `IpApiResponseStatus` — a case class (with dedicated enum) that models external API response. 
-*   `IpPairSummaryRequest` — a case class that models our JSON HTTP request's body.
-*   `IpInfo` and `IpInfoSummary` — case classes are used as an intermediate form of data that can be converted to response JSON.
+Pekko HTTP's routing DSL works by nesting directives. Each directive either filters the request (e.g. `get`, `post`, `pathPrefix`) or extracts data from it (e.g. `path(Segment)`, `entity(as[T])`). A request passes through only if it satisfies all directives, at which point the innermost `complete` block produces the response.
 
-### Modeling requests
+Key directives used here:
 
-`pekko-http` can unmarshal any JSON request into a type. This way we can validate incoming requests and pass only the ones that are well-formed and complete. The easiest way to model requests is to create algebraic data types and instrument them with validations in a constructor (typical methods include using Scala's Predef library with its `require` method). Example:
+* `pathPrefix("ip")` — matches requests whose path starts with `/ip`.
+* `path(Segment)` — extracts the next path segment as a string.
+* `get` / `post` — filters by HTTP method.
+* `entity(as[IpPairSummaryRequest])` — unmarshals the request body to a case class.
+* `logRequestResult(...)` — logs each request/response pair.
 
-     case class IpPairSummaryRequest(...) {
-      ...
-      require(ip1..split('.').map(_.toInt).map({s => s >= 0 && s <= 255}).fold(true)(_ && _), "wrong IP address")
-      ...
-    }
+Other useful directives (not used in this example):
 
-### Forming JSON response
+* `formFields("field1", "field2")` — extracts form fields from POST requests.
+* `headerValueByName("X-Auth-Token")` — extracts a header value.
+* `path("member" / Segment / "books")` — matches a path pattern with an extracted segment.
 
-One of the great features of `pekko-http` is response marshaling. The responses will be implicitly converted into JSON whether they are `Option[T]`, `Future[T]`, etc. Proper errors and response codes will also be generated.
+See the full list of [Pekko HTTP directives](https://pekko.apache.org/docs/pekko-http/current/routing-dsl/directives/index.html).
 
-Using this feature requires:
+### Building responses
 
-*   Having contents of `ErrorAccumulatingCirceSupport` in scope,
-*   declaring implicit JSON converters (here it's done inside `Protocols` trait).
+With JSON marshalling in scope, returning a response is straightforward — just return a marshallable type inside `complete`. Pekko HTTP handles serialization and sets appropriate status codes. `Future[T]`, `Option[T]`, tuples of `(StatusCode, T)`, and plain values all work. Returning `None` automatically produces a 404.
 
-Next: Making external HTTP requests.
+### Server startup
 
-## Making an external HTTP request
-
-Handling communication with external HTTP services is done inside [`Service`](https://github.com/theiterators/pekko-http-microservice/blob/master/src/main/scala/PekkoHttpMicroservice.scala#L64) trait.
-
-### Making an HTTP request
-
-Making a proper HTTP request using `pekko-http` leverages the Reactive Streams approach. It requires:
-
-*   defining an external service HTTP connection flow,
-*   defining a proper HTTP request,
-*   defining this request as a source,
-*   connecting the request source through external service HTTP connection flow with so-called `Sink`.
-
-In order for the flow to run, we also need `FlowMaterializer` and `ExecutionContext`. After the request is done, we get the standard `HttpResponse` that we need to handle.
-
-### Handling the response
-
-Handling `HttpResponse` consists of:
-
-*   checking if the request was successful,
-*   unmarshaling HTTP Entity into a case class.
-
-The unmarshaling uses the protocol implicit values defined earlier. Unmarshaling works using `Future[T]`s so we can always handle any errors and exceptions raised by our validation logic.
-
-Next: Declaring routes and responding to HTTP requests.
-
-## Routing and running server
-
-Routing directives can be found in the [`Service`](https://github.com/theiterators/pekko-http-microservice/blob/master/src/main/scala/PekkoHttpMicroservice.scala#L85) trait.
-
-`pekko-http` provides lots of useful routing directives. One can use multiple directives by nesting them inside one another. The request will go deeper down the nested structure if only it complies with each of the directive's requirements. Some directives filter the requests while others help to deconstruct it. If the request passes all directives, the final `complete(...) {...}` block gets evaluated as a `HttpResponse`.
-
-### Routing & filtering directives
-
-Directives responsible for routing are:
-
-*   `pathPrefix("ip")` — filters the request by its relative URI beginning,
-*   `path("ip"/"my")`  — filters the request by its part of the URI relative to the hostname or `pathPrefix` directive in which it is nested,
-*   `get` — filters GET requests,
-*   `post` — filters POST requests,
-*   and [many more.](https://doc.akka.io/docs/akka-http/current/routing-dsl/directives/index.html)
-
-### Deconstructing request
-
-Directives that let us deconstruct the request:
-
-*   `entity(as[IpPairSummaryRequest])` — unmarshals HTTP entity into an object; useful for handling JSON requests,
-*   `formFields('field1, 'field2)` — extracts form fields form POST request,
-*   `headerValueByName("X-Auth-Token")` — extracts a header value by its name,
-*   `path("member" / Segment / "books")` — the `Segment` part of the directive lets us extract a string from the URI,
-*   and [many more.](https://doc.akka.io/docs/akka-http/current/routing-dsl/directives/index.html)
-
-Directives can provide us with some values we can use later to prepare a response:
-
-    headerValueByName("X-Requester-Name") { requesterName =>
-      Ok("Hi " + requesterName)
-    }
-
-There are other directives like `logRequestResult` that don't change the flow of the request. We can also create our own directives whenever needed.
-
-### Building a response
-
-If we use JSON marshaling, it is very easy to build a JSON response. All we need to do is to return marshalable type in `complete` directive (ex. `String`, `Future[T]`, `Option[T]`, `StatusCode`, etc.). Most of the HTTP status codes are already implemented in `pekko-http`. Some of them are:
-
-*   `Ok` — 200 response
-*   `NotFound` — 404 response which is automatically generated when `None` is returned.
-*   `Unauthorized` — 401 response
-*   `Bad Request` — 400 response
-
-Next: Testing `pekko-http`.
+The `PekkoHttpMicroservice` object wires everything together: it creates the actor system, loads config, and binds the routes to the configured interface and port.
 
 ## Tests
 
-Check out [simple tests that we prepared](https://github.com/theiterators/pekko-http-microservice/blob/master/src/test/scala/ServiceSpec.scala) and don't forget to run them on your computer (`sbt test`)! 
+The [test suite](https://github.com/theiterators/pekko-http-microservice/blob/master/src/test/scala/ServiceSpec.scala) demonstrates two things:
 
-The interesting parts of the tests are:
+1. **Route testing syntax** — `pekko-http-testkit` lets you send requests directly to routes and assert on status codes, content types, and response bodies without starting a real server.
 
-*   the syntax of route checking,
-*   [the way external requests are mocked](https://github.com/theiterators/pekko-http-microservice/blob/master/src/test/scala/ServiceSpec.scala#L19).
+2. **Mocking external services** — the test overrides `ipApiConnectionFlow` with a `Flow` that returns canned responses instead of making real HTTP calls to ip-api.com. This keeps tests fast and deterministic.
 
-Next: Tutorial summary.
+Run them with:
+
+```
+$ sbt test
+```
 
 ## Summary
 
-And that's it! We hope you enjoyed this tutorial and learned how to write a small microservice that uses `pekko-http`, responds to `GET` and `POST` requests with JSON, and connects with external services through HTTP endpoint.
+That's it. This project shows how to build a small HTTP microservice with Pekko HTTP that handles JSON GET and POST requests and communicates with an external service. The patterns here — routing DSL, circe-based marshalling, connection flows for outbound HTTP, and testkit-based testing — apply to larger Pekko HTTP services as well.
 
-Be sure to ping us on [Github](https://github.com/theiterators/pekko-http-microservice) or [Twitter](https://twitter.com/luksow) if you liked it or if you have any questions.
+Questions or feedback? Open an issue on [GitHub](https://github.com/theiterators/pekko-http-microservice).
